@@ -32,6 +32,8 @@ namespace Controllers {
         [ SerializeField ]
         private float pitchSpeedMultiplier = 45f;
         [ SerializeField ]
+        private float crouchSpeedMultiplier = 0.5f;
+        [ SerializeField ]
         private float lookUpLimit = 60f;
         [ SerializeField ]
         private float lookDownLimit = -40f;
@@ -120,6 +122,21 @@ namespace Controllers {
         private RaycastHit lastGroundCheckHit;
         private Vector3 playerMoveInputAtLastGroundCheckHit;
 
+        [ Header("Crouching") ]
+        [ SerializeField ]
+        private bool playerIsCrouching;
+        [ SerializeField ]
+        [ Range(0f, 1.8f) ]
+        private float headCheckRadiusMultiplier;
+        [ SerializeField ]
+        private float crouchTimeMultiplier = 10f;
+        [ SerializeField ]
+        private float playerCrouchedHeightTolerance = 0.05f;
+        private float crouchAmount = 1f;
+        private float playerFullHeight;
+        private float playerCrouchedHeight;
+        private Vector3 playerCenterPoint = Vector3.zero;
+
         private void Awake() {
             rb = GetComponent<Rigidbody>();
             cc = GetComponent<CapsuleCollider>();
@@ -129,6 +146,9 @@ namespace Controllers {
 
             numberOfStepDetectRays = Mathf.RoundToInt(maxStepHeight * 100f * 0.5f + 1f);
             rayIncrementAmount = maxStepHeight / numberOfStepDetectRays;
+
+            playerFullHeight = cc.height;
+            playerCrouchedHeight = playerFullHeight - crouchAmount;
         }
 
         private void FixedUpdate() {
@@ -138,11 +158,19 @@ namespace Controllers {
                 PitchCamera();
             }
             playerMoveInput = GetMoveInput();
+
+            PlayerVariables();
+
             playerIsGrounded = PlayerGroundCheck();
 
             playerMoveInput = PlayerMove();
+
+            // todo redo stairs in another method
             playerMoveInput = PlayerStairs();
+            // todo redo slopes in another method
             playerMoveInput = PlayerSlope();
+
+            playerMoveInput = PlayerCrouch();
             playerMoveInput = PlayerRun();
 
             PlayerInfoCapture();
@@ -150,7 +178,7 @@ namespace Controllers {
             playerMoveInput.y = PlayerFallGravity();
             playerMoveInput.y = PlayerJump();
 
-            Debug.DrawRay(rb.position, rb.transform.TransformDirection(playerMoveInput), Color.red, 0.5f);
+            Debug.DrawRay(playerCenterPoint, rb.transform.TransformDirection(playerMoveInput), Color.red, 0.5f);
 
             rb.AddRelativeForce(playerMoveInput * rb.mass, ForceMode.Force);
         }
@@ -179,9 +207,13 @@ namespace Controllers {
             return new Vector3(input.move.x, 0f, input.move.y);
         }
 
+        private void PlayerVariables() {
+            playerCenterPoint = rb.position + cc.center;
+        }
+
         private bool PlayerGroundCheck() {
             var sphereCastRadius = cc.radius * groundCheckRadiusMultiplier;
-            Physics.SphereCast(rb.position, sphereCastRadius, Vector3.down, out groundCheckHit);
+            Physics.SphereCast(playerCenterPoint, sphereCastRadius, Vector3.down, out groundCheckHit);
             playerCenterToGroundDistance = groundCheckHit.distance + sphereCastRadius;
             return playerCenterToGroundDistance >= cc.bounds.extents.y - groundCheckDistanceTolerance
                 && playerCenterToGroundDistance <= cc.bounds.extents.y + groundCheckDistanceTolerance;
@@ -215,9 +247,9 @@ namespace Controllers {
                 var ray = 0f;
                 var raysThatHit = new List<RaycastHit>();
                 for (var x = 0; x <= numberOfStepDetectRays; x++, ray += rayIncrementAmount) {
-                    var rayLower = new Vector3(rb.position.x,
-                                               rb.position.y - playerHalfHeightToGround + ray,
-                                               rb.position.z);
+                    var rayLower = new Vector3(playerCenterPoint.x,
+                                               playerCenterPoint.y - playerHalfHeightToGround + ray,
+                                               playerCenterPoint.z);
                     if (Physics.Raycast(rayLower,
                                         rb.transform.TransformDirection(playerMoveInput),
                                         out var hitLower,
@@ -229,12 +261,12 @@ namespace Controllers {
                     }
                 }
                 if (raysThatHit.Count > 0) {
-                    var rayUpper = new Vector3(rb.position.x,
-                                               rb.position.y
+                    var rayUpper = new Vector3(playerCenterPoint.x,
+                                               playerCenterPoint.y
                                              - playerHalfHeightToGround
                                              + maxStepHeight
                                              + rayIncrementAmount,
-                                               rb.position.z);
+                                               playerCenterPoint.z);
                     Physics.Raycast(rayUpper,
                                     rb.transform.TransformDirection(playerMoveInput),
                                     out var hitUpper,
@@ -287,9 +319,9 @@ namespace Controllers {
                 var ray = 0f;
                 var raysThatHit = new List<RaycastHit>();
                 for (var x = 1; x <= numberOfStepDetectRays; x++, ray += rayIncrementAmount) {
-                    var rayLower = new Vector3(rb.position.x,
-                                               rb.position.y - playerHalfHeightToGround + ray,
-                                               rb.position.z);
+                    var rayLower = new Vector3(playerCenterPoint.x,
+                                               playerCenterPoint.y - playerHalfHeightToGround + ray,
+                                               playerCenterPoint.z);
                     if (Physics.Raycast(rayLower,
                                         rb.transform.TransformDirection(-playerMoveInput),
                                         out var hitLower,
@@ -301,12 +333,12 @@ namespace Controllers {
                     }
                 }
                 if (raysThatHit.Count > 0) {
-                    var rayUpper = new Vector3(rb.position.x,
-                                               rb.position.y
+                    var rayUpper = new Vector3(playerCenterPoint.x,
+                                               playerCenterPoint.y
                                              - playerHalfHeightToGround
                                              + maxStepHeight
                                              + rayIncrementAmount,
-                                               rb.position.z);
+                                               playerCenterPoint.z);
                     Physics.Raycast(rayUpper,
                                     rb.transform.TransformDirection(-playerMoveInput),
                                     out var hitUpper,
@@ -356,8 +388,8 @@ namespace Controllers {
                 if (groundSlopeAngle == 0) {
                     if (input.moveIsPressed) {
                         var rayCalculatedRayHeight
-                            = rb.position.y - playerCenterToGroundDistance + groundCheckDistanceTolerance;
-                        var rayOrigin = new Vector3(rb.position.x, rayCalculatedRayHeight, rb.position.z);
+                            = playerCenterPoint.y - playerCenterToGroundDistance + groundCheckDistanceTolerance;
+                        var rayOrigin = new Vector3(playerCenterPoint.x, rayCalculatedRayHeight, playerCenterPoint.z);
                         if (Physics.Raycast(rayOrigin,
                                             rb.transform.TransformDirection(calculatedPlayerMovement),
                                             out var hit,
@@ -393,15 +425,76 @@ namespace Controllers {
                     }
                 }
                 #if UNITY_EDITOR
-                Debug.DrawRay(rb.position, rb.transform.TransformDirection(calculatedPlayerMovement), Color.red, 0.5f);
+                Debug.DrawRay(playerCenterPoint,
+                              rb.transform.TransformDirection(calculatedPlayerMovement),
+                              Color.red,
+                              0.5f);
                 #endif
             }
             return calculatedPlayerMovement;
         }
 
+        private Vector3 PlayerCrouch() {
+            var calculatedPlayerCrouchSpeed = playerMoveInput;
+            if (input.crouch) {
+                Crouch();
+            } else if (playerIsCrouching) {
+                UnCrouch();
+            }
+            if (playerIsCrouching) {
+                calculatedPlayerCrouchSpeed *= crouchSpeedMultiplier;
+            }
+            return calculatedPlayerCrouchSpeed;
+        }
+
+        private void Crouch() {
+            if (cc.height >= playerCrouchedHeight + playerCrouchedHeightTolerance) {
+                var time = Time.fixedDeltaTime * crouchTimeMultiplier;
+                var amount = Mathf.Lerp(0, crouchAmount, time);
+                cc.height -= amount;
+                cc.center = new Vector3(cc.center.x, cc.center.y + (amount * 0.5f), cc.center.z);
+                rb.position = new Vector3(rb.position.x, rb.position.y - amount, rb.position.z);
+                playerIsCrouching = true;
+            } else {
+                EnforceExactCharacterHeight();
+            }
+        }
+
+        private void UnCrouch() {
+            if (cc.height < playerFullHeight - playerCrouchedHeightTolerance) {
+                var sphereCastRadius = cc.radius * headCheckRadiusMultiplier;
+                var headroomBufferDistance = 0.05f;
+                var sphereCastTravelDistance = (cc.bounds.extents.y + headroomBufferDistance) - sphereCastRadius;
+                if (!(Physics.SphereCast(playerCenterPoint,
+                                         sphereCastRadius,
+                                         rb.transform.up,
+                                         out _,
+                                         sphereCastTravelDistance))) {
+                    var time = Time.fixedDeltaTime * crouchTimeMultiplier;
+                    var amount = Mathf.Lerp(0f, crouchAmount, time);
+                    cc.height += amount;
+                    cc.center = new Vector3(cc.center.x, cc.center.y - (amount * 0.5f), cc.center.z);
+                    rb.position = new Vector3(rb.position.x, rb.position.y + amount, rb.position.z);
+                } else {
+                    playerIsCrouching = false;
+                    EnforceExactCharacterHeight();
+                }
+            }
+        }
+
+        private void EnforceExactCharacterHeight() {
+            if (playerIsCrouching) {
+                cc.height = playerCrouchedHeight;
+                cc.center = new Vector3(0, crouchAmount * 0.5f, 0f);
+            } else {
+                cc.height = playerFullHeight;
+                cc.center = Vector3.zero;
+            }
+        }
+
         private Vector3 PlayerRun() {
             var calculatedPlayerRunSpeed = playerMoveInput;
-            if (input.run && input.moveIsPressed) {
+            if (input.run && input.moveIsPressed && !playerIsCrouching) {
                 calculatedPlayerRunSpeed *= runMultiplier;
             }
             return calculatedPlayerRunSpeed;

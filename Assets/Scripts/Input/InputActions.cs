@@ -82,6 +82,15 @@ namespace Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Value"",
+                    ""id"": ""e5f27e37-28ff-41fb-acdb-8ecae1bedab9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -260,6 +269,28 @@ namespace Input
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3fd2606b-33b0-408d-afbc-b4f684a1af01"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e90895c4-b445-48b2-ae5f-3fdf3344a124"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -274,6 +305,7 @@ namespace Input
             m_HumanoidLand_CameraDistance = m_HumanoidLand.FindAction("CameraDistance", throwIfNotFound: true);
             m_HumanoidLand_Run = m_HumanoidLand.FindAction("Run", throwIfNotFound: true);
             m_HumanoidLand_Jump = m_HumanoidLand.FindAction("Jump", throwIfNotFound: true);
+            m_HumanoidLand_Crouch = m_HumanoidLand.FindAction("Crouch", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -339,6 +371,7 @@ namespace Input
         private readonly InputAction m_HumanoidLand_CameraDistance;
         private readonly InputAction m_HumanoidLand_Run;
         private readonly InputAction m_HumanoidLand_Jump;
+        private readonly InputAction m_HumanoidLand_Crouch;
         public struct HumanoidLandActions
         {
             private @InputActions m_Wrapper;
@@ -349,6 +382,7 @@ namespace Input
             public InputAction @CameraDistance => m_Wrapper.m_HumanoidLand_CameraDistance;
             public InputAction @Run => m_Wrapper.m_HumanoidLand_Run;
             public InputAction @Jump => m_Wrapper.m_HumanoidLand_Jump;
+            public InputAction @Crouch => m_Wrapper.m_HumanoidLand_Crouch;
             public InputActionMap Get() { return m_Wrapper.m_HumanoidLand; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -376,6 +410,9 @@ namespace Input
                     @Jump.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnJump;
                     @Jump.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnJump;
                     @Jump.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnJump;
+                    @Crouch.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnCrouch;
+                    @Crouch.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnCrouch;
+                    @Crouch.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnCrouch;
                 }
                 m_Wrapper.m_HumanoidLandActionsCallbackInterface = instance;
                 if (instance != null)
@@ -398,6 +435,9 @@ namespace Input
                     @Jump.started += instance.OnJump;
                     @Jump.performed += instance.OnJump;
                     @Jump.canceled += instance.OnJump;
+                    @Crouch.started += instance.OnCrouch;
+                    @Crouch.performed += instance.OnCrouch;
+                    @Crouch.canceled += instance.OnCrouch;
                 }
             }
         }
@@ -410,6 +450,7 @@ namespace Input
             void OnCameraDistance(InputAction.CallbackContext context);
             void OnRun(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
+            void OnCrouch(InputAction.CallbackContext context);
         }
     }
 }

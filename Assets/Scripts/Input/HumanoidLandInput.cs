@@ -12,6 +12,7 @@ namespace Input {
         public bool invertCameraDistanceScroll { get; private set; } = true;
         public bool run { get; private set; }
         public bool jump { get; private set; }
+        public bool crouch { get; private set; }
 
         private InputActions inputActions;
         private InputAction moveAction;
@@ -19,6 +20,7 @@ namespace Input {
         private InputAction cameraDistanceAction;
         private InputAction runAction;
         private InputAction jumpAction;
+        private InputAction crouchAction;
 
         private void Awake() {
             inputActions = new InputActions();
@@ -27,6 +29,7 @@ namespace Input {
             cameraDistanceAction = inputActions.HumanoidLand.CameraDistance;
             runAction = inputActions.HumanoidLand.Run;
             jumpAction = inputActions.HumanoidLand.Jump;
+            crouchAction = inputActions.HumanoidLand.Crouch;
         }
 
         private void OnEnable() {
@@ -43,9 +46,12 @@ namespace Input {
 
             runAction.started += OnRun;
             runAction.canceled += OnRun;
-            
+
             jumpAction.started += OnJump;
             jumpAction.canceled += OnJump;
+
+            crouchAction.started += OnCrouch;
+            crouchAction.canceled += OnCrouch;
         }
 
         private void OnDisable() {
@@ -60,9 +66,12 @@ namespace Input {
 
             runAction.started -= OnRun;
             runAction.canceled -= OnRun;
-            
-            jumpAction.started += OnJump;
-            jumpAction.canceled += OnJump;
+
+            jumpAction.started -= OnJump;
+            jumpAction.canceled -= OnJump;
+
+            crouchAction.started -= OnCrouch;
+            crouchAction.canceled -= OnCrouch;
 
             inputActions.Disable();
         }
@@ -87,9 +96,13 @@ namespace Input {
         private void OnRun(InputAction.CallbackContext ctx) {
             run = ctx.started;
         }
-        
+
         private void OnJump(InputAction.CallbackContext ctx) {
             jump = ctx.started;
+        }
+
+        private void OnCrouch(InputAction.CallbackContext ctx) {
+            crouch = ctx.started;
         }
     }
 }
