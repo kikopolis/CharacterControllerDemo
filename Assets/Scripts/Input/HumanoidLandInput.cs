@@ -13,10 +13,11 @@ namespace Input {
         public bool runInput { get; private set; }
         public bool jumpInput { get; private set; }
         public bool crouchInput { get; private set; }
-        public float activateInput { get; private set; }
-        public bool onOffWasPressedThisFrame { get; private set; }
-        public bool modeWasPressedThisFrame { get; private set; }
+        public float interactInput { get; private set; }
+        public bool fireInput { get; private set; }
+        public bool altFireInput { get; private set; }
         public bool switchCharacterWasPressedThisFrame { get; private set; }
+        public bool hotbarOneInput { get; private set; }
 
         private InputActions inputActions;
         private InputAction moveAction;
@@ -25,7 +26,10 @@ namespace Input {
         private InputAction runAction;
         private InputAction jumpAction;
         private InputAction crouchAction;
-        private InputAction activateAction;
+        private InputAction interactAction;
+        private InputAction fireAction;
+        private InputAction altFireAction;
+        private InputAction hotbarOneAction;
 
         private void Awake() {
             inputActions = new InputActions();
@@ -35,7 +39,10 @@ namespace Input {
             runAction = inputActions.HumanoidLand.Run;
             jumpAction = inputActions.HumanoidLand.Jump;
             crouchAction = inputActions.HumanoidLand.Crouch;
-            activateAction = inputActions.HumanoidLand.Activate;
+            interactAction = inputActions.HumanoidLand.Interact;
+            fireAction = inputActions.HumanoidLand.Fire;
+            altFireAction = inputActions.HumanoidLand.AltFire;
+            hotbarOneAction = inputActions.HumanoidLand.Hotbar1;
         }
 
         private void OnEnable() {
@@ -59,8 +66,17 @@ namespace Input {
             crouchAction.started += SetCrouch;
             crouchAction.canceled += SetCrouch;
 
-            activateAction.performed += SetActivate;
-            activateAction.canceled += SetActivate;
+            interactAction.performed += SetInteract;
+            interactAction.canceled += SetInteract;
+
+            fireAction.started += SetFire;
+            fireAction.canceled += SetFire;
+
+            altFireAction.started += SetAltFire;
+            altFireAction.canceled += SetAltFire;
+
+            hotbarOneAction.started += SetHotbarOne;
+            hotbarOneAction.canceled += SetHotbarOne;
         }
 
         private void OnDisable() {
@@ -82,16 +98,23 @@ namespace Input {
             crouchAction.started -= SetCrouch;
             crouchAction.canceled -= SetCrouch;
 
-            activateAction.performed -= SetActivate;
-            activateAction.canceled -= SetActivate;
+            interactAction.performed -= SetInteract;
+            interactAction.canceled -= SetInteract;
+
+            fireAction.started -= SetFire;
+            fireAction.canceled -= SetFire;
+
+            altFireAction.started -= SetAltFire;
+            altFireAction.canceled -= SetAltFire;
+
+            hotbarOneAction.started -= SetHotbarOne;
+            hotbarOneAction.canceled -= SetHotbarOne;
 
             inputActions.Disable();
         }
 
         private void Update() {
             changeCameraWasPressedThisFrame = inputActions.HumanoidLand.ChangeCamera.WasPressedThisFrame();
-            onOffWasPressedThisFrame = inputActions.HumanoidLand.OnOff.WasPressedThisFrame();
-            modeWasPressedThisFrame = inputActions.HumanoidLand.Mode.WasPressedThisFrame();
             switchCharacterWasPressedThisFrame = inputActions.HumanoidLand.SwitchCharacter.WasPressedThisFrame();
         }
 
@@ -120,8 +143,20 @@ namespace Input {
             crouchInput = ctx.started;
         }
 
-        private void SetActivate(InputAction.CallbackContext ctx) {
-            activateInput = ctx.ReadValue<float>();
+        private void SetInteract(InputAction.CallbackContext ctx) {
+            interactInput = ctx.ReadValue<float>();
+        }
+
+        private void SetFire(InputAction.CallbackContext ctx) {
+            fireInput = ctx.started;
+        }
+
+        private void SetAltFire(InputAction.CallbackContext ctx) {
+            altFireInput = ctx.started;
+        }
+
+        private void SetHotbarOne(InputAction.CallbackContext ctx) {
+            hotbarOneInput = ctx.started;
         }
     }
 }

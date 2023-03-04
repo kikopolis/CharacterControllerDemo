@@ -69,27 +69,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Activate",
-                    "type": "Value",
-                    "id": "6c0f5679-14da-4785-813e-abd6e11c8fbb",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "OnOff",
+                    "name": "Interact",
                     "type": "Button",
                     "id": "c32fb440-4c25-4192-8d02-9d0ae7574378",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Mode",
-                    "type": "Button",
-                    "id": "cc14ff92-60be-4002-987f-863c016dc2b8",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -99,6 +81,33 @@
                     "name": "Switch Character",
                     "type": "Button",
                     "id": "0fc246f6-e3e6-4bea-9c41-1e1d86df37fb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Fire",
+                    "type": "Value",
+                    "id": "6c0f5679-14da-4785-813e-abd6e11c8fbb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "AltFire",
+                    "type": "Value",
+                    "id": "b1a962cb-af4d-4fb7-9f79-e8d69c4eb982",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Hotbar1",
+                    "type": "Button",
+                    "id": "edcb10e3-62f3-4f37-a2fe-ce4f070b0c8f",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -311,7 +320,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Activate",
+                    "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -322,7 +331,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Activate",
+                    "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "91dd51ea-d6dd-4462-a77e-75e2a125449e",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AltFire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "344cb5c4-a00e-4d80-af1e-52d2e700f8eb",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AltFire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -333,7 +364,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "OnOff",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -344,51 +375,62 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "OnOff",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "bd129f14-dafc-426b-b237-e19c8a663273",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Mode",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9ee6e00a-222c-4f2c-a7bc-1f2435086c94",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Mode",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9ee15b58-f39b-4a3f-8b98-8ecdab80fb84",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Switch Character",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "3a10fb85-4b1d-428f-b92c-a6c3be82b955",
-                    "path": "<Keyboard>/tab",
+                    "path": "<Keyboard>/ctrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Switch Character",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Button With One Modifier",
+                    "id": "bdc7ec6b-c0fb-472b-9e27-813d7b5271c6",
+                    "path": "ButtonWithOneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Switch Character",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "button",
+                    "id": "9cd842d0-7b46-40ff-b369-2ba0e6908d07",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Switch Character",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Button",
+                    "id": "ff729076-9f82-4680-ab16-b34a6635aade",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Switch Character",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "f9883207-4ffb-4527-bba3-110df893153a",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Hotbar1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

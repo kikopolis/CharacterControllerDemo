@@ -93,27 +93,9 @@ namespace Input
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Activate"",
-                    ""type"": ""Value"",
-                    ""id"": ""6c0f5679-14da-4785-813e-abd6e11c8fbb"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""OnOff"",
+                    ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""c32fb440-4c25-4192-8d02-9d0ae7574378"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Mode"",
-                    ""type"": ""Button"",
-                    ""id"": ""cc14ff92-60be-4002-987f-863c016dc2b8"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -123,6 +105,33 @@ namespace Input
                     ""name"": ""Switch Character"",
                     ""type"": ""Button"",
                     ""id"": ""0fc246f6-e3e6-4bea-9c41-1e1d86df37fb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Value"",
+                    ""id"": ""6c0f5679-14da-4785-813e-abd6e11c8fbb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""AltFire"",
+                    ""type"": ""Value"",
+                    ""id"": ""b1a962cb-af4d-4fb7-9f79-e8d69c4eb982"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Hotbar1"",
+                    ""type"": ""Button"",
+                    ""id"": ""edcb10e3-62f3-4f37-a2fe-ce4f070b0c8f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -335,7 +344,7 @@ namespace Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Activate"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -346,7 +355,29 @@ namespace Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Activate"",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""91dd51ea-d6dd-4462-a77e-75e2a125449e"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AltFire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""344cb5c4-a00e-4d80-af1e-52d2e700f8eb"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AltFire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -357,7 +388,7 @@ namespace Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""OnOff"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -368,51 +399,62 @@ namespace Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""OnOff"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""bd129f14-dafc-426b-b237-e19c8a663273"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Mode"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9ee6e00a-222c-4f2c-a7bc-1f2435086c94"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Mode"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9ee15b58-f39b-4a3f-8b98-8ecdab80fb84"",
-                    ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Switch Character"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""3a10fb85-4b1d-428f-b92c-a6c3be82b955"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Switch Character"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Button With One Modifier"",
+                    ""id"": ""bdc7ec6b-c0fb-472b-9e27-813d7b5271c6"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Switch Character"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""button"",
+                    ""id"": ""9cd842d0-7b46-40ff-b369-2ba0e6908d07"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Switch Character"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button"",
+                    ""id"": ""ff729076-9f82-4680-ab16-b34a6635aade"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Switch Character"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f9883207-4ffb-4527-bba3-110df893153a"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hotbar1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -430,10 +472,11 @@ namespace Input
             m_HumanoidLand_Run = m_HumanoidLand.FindAction("Run", throwIfNotFound: true);
             m_HumanoidLand_Jump = m_HumanoidLand.FindAction("Jump", throwIfNotFound: true);
             m_HumanoidLand_Crouch = m_HumanoidLand.FindAction("Crouch", throwIfNotFound: true);
-            m_HumanoidLand_Activate = m_HumanoidLand.FindAction("Activate", throwIfNotFound: true);
-            m_HumanoidLand_OnOff = m_HumanoidLand.FindAction("OnOff", throwIfNotFound: true);
-            m_HumanoidLand_Mode = m_HumanoidLand.FindAction("Mode", throwIfNotFound: true);
+            m_HumanoidLand_Interact = m_HumanoidLand.FindAction("Interact", throwIfNotFound: true);
             m_HumanoidLand_SwitchCharacter = m_HumanoidLand.FindAction("Switch Character", throwIfNotFound: true);
+            m_HumanoidLand_Fire = m_HumanoidLand.FindAction("Fire", throwIfNotFound: true);
+            m_HumanoidLand_AltFire = m_HumanoidLand.FindAction("AltFire", throwIfNotFound: true);
+            m_HumanoidLand_Hotbar1 = m_HumanoidLand.FindAction("Hotbar1", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -500,10 +543,11 @@ namespace Input
         private readonly InputAction m_HumanoidLand_Run;
         private readonly InputAction m_HumanoidLand_Jump;
         private readonly InputAction m_HumanoidLand_Crouch;
-        private readonly InputAction m_HumanoidLand_Activate;
-        private readonly InputAction m_HumanoidLand_OnOff;
-        private readonly InputAction m_HumanoidLand_Mode;
+        private readonly InputAction m_HumanoidLand_Interact;
         private readonly InputAction m_HumanoidLand_SwitchCharacter;
+        private readonly InputAction m_HumanoidLand_Fire;
+        private readonly InputAction m_HumanoidLand_AltFire;
+        private readonly InputAction m_HumanoidLand_Hotbar1;
         public struct HumanoidLandActions
         {
             private @InputActions m_Wrapper;
@@ -515,10 +559,11 @@ namespace Input
             public InputAction @Run => m_Wrapper.m_HumanoidLand_Run;
             public InputAction @Jump => m_Wrapper.m_HumanoidLand_Jump;
             public InputAction @Crouch => m_Wrapper.m_HumanoidLand_Crouch;
-            public InputAction @Activate => m_Wrapper.m_HumanoidLand_Activate;
-            public InputAction @OnOff => m_Wrapper.m_HumanoidLand_OnOff;
-            public InputAction @Mode => m_Wrapper.m_HumanoidLand_Mode;
+            public InputAction @Interact => m_Wrapper.m_HumanoidLand_Interact;
             public InputAction @SwitchCharacter => m_Wrapper.m_HumanoidLand_SwitchCharacter;
+            public InputAction @Fire => m_Wrapper.m_HumanoidLand_Fire;
+            public InputAction @AltFire => m_Wrapper.m_HumanoidLand_AltFire;
+            public InputAction @Hotbar1 => m_Wrapper.m_HumanoidLand_Hotbar1;
             public InputActionMap Get() { return m_Wrapper.m_HumanoidLand; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -549,18 +594,21 @@ namespace Input
                     @Crouch.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnCrouch;
                     @Crouch.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnCrouch;
                     @Crouch.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnCrouch;
-                    @Activate.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnActivate;
-                    @Activate.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnActivate;
-                    @Activate.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnActivate;
-                    @OnOff.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnOnOff;
-                    @OnOff.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnOnOff;
-                    @OnOff.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnOnOff;
-                    @Mode.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnMode;
-                    @Mode.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnMode;
-                    @Mode.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnMode;
+                    @Interact.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnInteract;
+                    @Interact.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnInteract;
+                    @Interact.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnInteract;
                     @SwitchCharacter.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnSwitchCharacter;
                     @SwitchCharacter.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnSwitchCharacter;
                     @SwitchCharacter.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnSwitchCharacter;
+                    @Fire.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnFire;
+                    @Fire.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnFire;
+                    @Fire.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnFire;
+                    @AltFire.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnAltFire;
+                    @AltFire.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnAltFire;
+                    @AltFire.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnAltFire;
+                    @Hotbar1.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnHotbar1;
+                    @Hotbar1.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnHotbar1;
+                    @Hotbar1.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnHotbar1;
                 }
                 m_Wrapper.m_HumanoidLandActionsCallbackInterface = instance;
                 if (instance != null)
@@ -586,18 +634,21 @@ namespace Input
                     @Crouch.started += instance.OnCrouch;
                     @Crouch.performed += instance.OnCrouch;
                     @Crouch.canceled += instance.OnCrouch;
-                    @Activate.started += instance.OnActivate;
-                    @Activate.performed += instance.OnActivate;
-                    @Activate.canceled += instance.OnActivate;
-                    @OnOff.started += instance.OnOnOff;
-                    @OnOff.performed += instance.OnOnOff;
-                    @OnOff.canceled += instance.OnOnOff;
-                    @Mode.started += instance.OnMode;
-                    @Mode.performed += instance.OnMode;
-                    @Mode.canceled += instance.OnMode;
+                    @Interact.started += instance.OnInteract;
+                    @Interact.performed += instance.OnInteract;
+                    @Interact.canceled += instance.OnInteract;
                     @SwitchCharacter.started += instance.OnSwitchCharacter;
                     @SwitchCharacter.performed += instance.OnSwitchCharacter;
                     @SwitchCharacter.canceled += instance.OnSwitchCharacter;
+                    @Fire.started += instance.OnFire;
+                    @Fire.performed += instance.OnFire;
+                    @Fire.canceled += instance.OnFire;
+                    @AltFire.started += instance.OnAltFire;
+                    @AltFire.performed += instance.OnAltFire;
+                    @AltFire.canceled += instance.OnAltFire;
+                    @Hotbar1.started += instance.OnHotbar1;
+                    @Hotbar1.performed += instance.OnHotbar1;
+                    @Hotbar1.canceled += instance.OnHotbar1;
                 }
             }
         }
@@ -611,10 +662,11 @@ namespace Input
             void OnRun(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnCrouch(InputAction.CallbackContext context);
-            void OnActivate(InputAction.CallbackContext context);
-            void OnOnOff(InputAction.CallbackContext context);
-            void OnMode(InputAction.CallbackContext context);
+            void OnInteract(InputAction.CallbackContext context);
             void OnSwitchCharacter(InputAction.CallbackContext context);
+            void OnFire(InputAction.CallbackContext context);
+            void OnAltFire(InputAction.CallbackContext context);
+            void OnHotbar1(InputAction.CallbackContext context);
         }
     }
 }

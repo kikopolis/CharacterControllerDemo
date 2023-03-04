@@ -24,13 +24,13 @@ public class Manipulator : MonoBehaviour {
     }
 
     private void Update() {
-        if (input.onOffWasPressedThisFrame) {
-            OnOff();
-        }
-        if (input.modeWasPressedThisFrame) {
+        // if (input.interactInput != 0) {
+        //     OnOff();
+        // }
+        if (input.altFireInput) {
             ChangeMode();
         }
-        manipulatorToggledOn = input.activateInput > 0f;
+        manipulatorToggledOn = input.fireInput;
         SetColor();
     }
 
@@ -73,12 +73,7 @@ public class Manipulator : MonoBehaviour {
             if (distance == 0f) {
                 return;
             }
-            float forceMagnitude;
-            if (input.activateInput > 0f) {
-                forceMagnitude = GRAVITATIONAL_CONSTANT * (750f * rb.mass) / distance * input.activateInput;
-            } else {
-                forceMagnitude = GRAVITATIONAL_CONSTANT * (750f * rb.mass) / distance;
-            }
+            var forceMagnitude = GRAVITATIONAL_CONSTANT * (750f * rb.mass) / distance;
             var force = direction.normalized * forceMagnitude;
             if (manipulatorModeToggled) {
                 rb.AddForce(-force);
