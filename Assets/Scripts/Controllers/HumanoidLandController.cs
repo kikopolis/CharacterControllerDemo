@@ -185,7 +185,7 @@ namespace Controllers {
 
         private Vector3 GetLookInput() {
             previousPlayerLookInput = playerLookInput;
-            playerLookInput = new Vector3(input.look.x, input.invertMouse ? -input.look.y : input.look.y, 0f);
+            playerLookInput = new Vector3(input.lookInput.x, input.invertMouse ? -input.lookInput.y : input.lookInput.y, 0f);
             return Vector3.Lerp(previousPlayerLookInput, playerLookInput, playerLookInputLerpTime);
         }
 
@@ -204,7 +204,7 @@ namespace Controllers {
         }
 
         private Vector3 GetMoveInput() {
-            return new Vector3(input.move.x, 0f, input.move.y);
+            return new Vector3(input.moveInput.x, 0f, input.moveInput.y);
         }
 
         private void PlayerVariables() {
@@ -436,7 +436,7 @@ namespace Controllers {
 
         private Vector3 PlayerCrouch() {
             var calculatedPlayerCrouchSpeed = playerMoveInput;
-            if (input.crouch) {
+            if (input.crouchInput) {
                 Crouch();
             } else if (playerIsCrouching) {
                 UnCrouch();
@@ -494,7 +494,7 @@ namespace Controllers {
 
         private Vector3 PlayerRun() {
             var calculatedPlayerRunSpeed = playerMoveInput;
-            if (input.run && input.moveIsPressed && !playerIsCrouching) {
+            if (input.runInput && input.moveIsPressed && !playerIsCrouching) {
                 calculatedPlayerRunSpeed *= runMultiplier;
             }
             return calculatedPlayerRunSpeed;
@@ -540,7 +540,7 @@ namespace Controllers {
                     jumpBufferTimeCounter = 0f;
                     coyoteTimeCounter = 0f;
                 }
-            } else if (input.jump && isJumping && !playerIsGrounded && jumpTimeCounter > 0f) {
+            } else if (input.jumpInput && isJumping && !playerIsGrounded && jumpTimeCounter > 0f) {
                 calculatedJumpInput = initialJumpForceMultiplier * continualJumpForceMultiplier;
             } else if (isJumping && playerIsGrounded) {
                 isJumping = false;
@@ -578,12 +578,12 @@ namespace Controllers {
         }
 
         private void SetJumpPressedBufferCounter() {
-            if (!jumpPressedLastFrame && input.jump) {
+            if (!jumpPressedLastFrame && input.jumpInput) {
                 jumpBufferTimeCounter = jumpBufferTime;
             } else if (jumpBufferTimeCounter > 0f) {
                 jumpBufferTimeCounter -= Time.fixedDeltaTime;
             }
-            jumpPressedLastFrame = input.jump;
+            jumpPressedLastFrame = input.jumpInput;
         }
     }
 }

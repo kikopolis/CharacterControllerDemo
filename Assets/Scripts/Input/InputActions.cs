@@ -91,6 +91,42 @@ namespace Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Activate"",
+                    ""type"": ""Value"",
+                    ""id"": ""6c0f5679-14da-4785-813e-abd6e11c8fbb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""OnOff"",
+                    ""type"": ""Button"",
+                    ""id"": ""c32fb440-4c25-4192-8d02-9d0ae7574378"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Mode"",
+                    ""type"": ""Button"",
+                    ""id"": ""cc14ff92-60be-4002-987f-863c016dc2b8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Switch Character"",
+                    ""type"": ""Button"",
+                    ""id"": ""0fc246f6-e3e6-4bea-9c41-1e1d86df37fb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -291,6 +327,94 @@ namespace Input
                     ""action"": ""Crouch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fcea6afe-b932-4cf4-ace3-73180180bd16"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Activate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""592ded71-886d-4193-befd-5227edb78fc6"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Activate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53ba4c73-e441-4a75-96bf-9dd022d90e36"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OnOff"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""057a064e-ab17-4356-86cf-ebd5683ea61f"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OnOff"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bd129f14-dafc-426b-b237-e19c8a663273"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9ee6e00a-222c-4f2c-a7bc-1f2435086c94"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9ee15b58-f39b-4a3f-8b98-8ecdab80fb84"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Switch Character"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3a10fb85-4b1d-428f-b92c-a6c3be82b955"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Switch Character"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -306,6 +430,10 @@ namespace Input
             m_HumanoidLand_Run = m_HumanoidLand.FindAction("Run", throwIfNotFound: true);
             m_HumanoidLand_Jump = m_HumanoidLand.FindAction("Jump", throwIfNotFound: true);
             m_HumanoidLand_Crouch = m_HumanoidLand.FindAction("Crouch", throwIfNotFound: true);
+            m_HumanoidLand_Activate = m_HumanoidLand.FindAction("Activate", throwIfNotFound: true);
+            m_HumanoidLand_OnOff = m_HumanoidLand.FindAction("OnOff", throwIfNotFound: true);
+            m_HumanoidLand_Mode = m_HumanoidLand.FindAction("Mode", throwIfNotFound: true);
+            m_HumanoidLand_SwitchCharacter = m_HumanoidLand.FindAction("Switch Character", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -372,6 +500,10 @@ namespace Input
         private readonly InputAction m_HumanoidLand_Run;
         private readonly InputAction m_HumanoidLand_Jump;
         private readonly InputAction m_HumanoidLand_Crouch;
+        private readonly InputAction m_HumanoidLand_Activate;
+        private readonly InputAction m_HumanoidLand_OnOff;
+        private readonly InputAction m_HumanoidLand_Mode;
+        private readonly InputAction m_HumanoidLand_SwitchCharacter;
         public struct HumanoidLandActions
         {
             private @InputActions m_Wrapper;
@@ -383,6 +515,10 @@ namespace Input
             public InputAction @Run => m_Wrapper.m_HumanoidLand_Run;
             public InputAction @Jump => m_Wrapper.m_HumanoidLand_Jump;
             public InputAction @Crouch => m_Wrapper.m_HumanoidLand_Crouch;
+            public InputAction @Activate => m_Wrapper.m_HumanoidLand_Activate;
+            public InputAction @OnOff => m_Wrapper.m_HumanoidLand_OnOff;
+            public InputAction @Mode => m_Wrapper.m_HumanoidLand_Mode;
+            public InputAction @SwitchCharacter => m_Wrapper.m_HumanoidLand_SwitchCharacter;
             public InputActionMap Get() { return m_Wrapper.m_HumanoidLand; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -413,6 +549,18 @@ namespace Input
                     @Crouch.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnCrouch;
                     @Crouch.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnCrouch;
                     @Crouch.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnCrouch;
+                    @Activate.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnActivate;
+                    @Activate.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnActivate;
+                    @Activate.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnActivate;
+                    @OnOff.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnOnOff;
+                    @OnOff.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnOnOff;
+                    @OnOff.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnOnOff;
+                    @Mode.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnMode;
+                    @Mode.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnMode;
+                    @Mode.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnMode;
+                    @SwitchCharacter.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnSwitchCharacter;
+                    @SwitchCharacter.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnSwitchCharacter;
+                    @SwitchCharacter.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnSwitchCharacter;
                 }
                 m_Wrapper.m_HumanoidLandActionsCallbackInterface = instance;
                 if (instance != null)
@@ -438,6 +586,18 @@ namespace Input
                     @Crouch.started += instance.OnCrouch;
                     @Crouch.performed += instance.OnCrouch;
                     @Crouch.canceled += instance.OnCrouch;
+                    @Activate.started += instance.OnActivate;
+                    @Activate.performed += instance.OnActivate;
+                    @Activate.canceled += instance.OnActivate;
+                    @OnOff.started += instance.OnOnOff;
+                    @OnOff.performed += instance.OnOnOff;
+                    @OnOff.canceled += instance.OnOnOff;
+                    @Mode.started += instance.OnMode;
+                    @Mode.performed += instance.OnMode;
+                    @Mode.canceled += instance.OnMode;
+                    @SwitchCharacter.started += instance.OnSwitchCharacter;
+                    @SwitchCharacter.performed += instance.OnSwitchCharacter;
+                    @SwitchCharacter.canceled += instance.OnSwitchCharacter;
                 }
             }
         }
@@ -451,6 +611,10 @@ namespace Input
             void OnRun(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnCrouch(InputAction.CallbackContext context);
+            void OnActivate(InputAction.CallbackContext context);
+            void OnOnOff(InputAction.CallbackContext context);
+            void OnMode(InputAction.CallbackContext context);
+            void OnSwitchCharacter(InputAction.CallbackContext context);
         }
     }
 }

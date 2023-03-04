@@ -73,7 +73,7 @@ namespace Misc {
 
         private void OnTriggerEnter(Collider other) {
             if (!(other.attachedRigidbody == null) && !(other.attachedRigidbody.isKinematic)) {
-                if (!(rbsOnPlatform.Contains(other.attachedRigidbody))) {
+                if (!(rbsOnPlatform.Contains(other.attachedRigidbody))) { 
                     rbsOnPlatform.Add(other.attachedRigidbody);
                     rbsOnPlatformInTime.Add(other.attachedRigidbody, 0f);
                 }
