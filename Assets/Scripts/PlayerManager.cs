@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using Cinemachine;
+﻿using Cinemachine;
 using Controllers;
 using Input;
-using OpenCover.Framework.Model;
 using PlayerSystems;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour {
+    public static PlayerManager instance { get; private set; }
     [ SerializeField ]
     private HumanoidLandInput input;
     [ SerializeField ]
@@ -18,13 +16,17 @@ public class PlayerManager : MonoBehaviour {
     // private HumanoidLandController greenController;
     [ SerializeField ]
     private Inventory redInventory;
-    [ SerializeField ]
     private WeaponSystem weaponSystem;
-    [ SerializeField ]
+    [ HideInInspector ]
+    public Transform gunAttackSource;
     private IEquippableWeapon[] hotbar = new IEquippableWeapon[10];
     private IEquippableWeapon currentEquippedWeapon;
 
     private void Awake() {
+        instance = this;
+        weaponSystem = GetComponent<WeaponSystem>();
+        // todo when weapon has a model, maybe add a true weapon tip transform?
+        gunAttackSource = GetCurrentCameraFollow();
         redController.enabled = true;
         // greenController.enabled = false;
     }
@@ -32,6 +34,7 @@ public class PlayerManager : MonoBehaviour {
     private void FixedUpdate() {
         // todo testing equipment generation
         GenerateTestHotbar();
+
         SelectWeapon();
         Fire();
         if (input.switchCharacterWasPressedThisFrame) {
@@ -87,14 +90,14 @@ public class PlayerManager : MonoBehaviour {
         // return redController.enabled ? redController.cameraFollow : greenController.cameraFollow;
     }
 
-    public void AddEquippable(IEquippableWeapon item, int slot) {
+    public void AddToHotbar(IEquippableWeapon item, int slot) {
         if (slot > 10) {
             return;
         }
         hotbar[slot] = item;
     }
 
-    public void RemoveEquippable(IEquippableWeapon item, int slot) {
+    public void RemoveFromHotbar(IEquippableWeapon item, int slot) {
         if (slot > 10) {
             return;
         }

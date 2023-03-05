@@ -136,6 +136,15 @@ namespace Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""5e765b24-6165-48e9-9ee1-ce99813ca7ee"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -457,6 +466,17 @@ namespace Input
                     ""action"": ""Hotbar1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c8e097c0-d8ec-469a-90a6-dc058af1aa49"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -477,6 +497,7 @@ namespace Input
             m_HumanoidLand_Fire = m_HumanoidLand.FindAction("Fire", throwIfNotFound: true);
             m_HumanoidLand_AltFire = m_HumanoidLand.FindAction("AltFire", throwIfNotFound: true);
             m_HumanoidLand_Hotbar1 = m_HumanoidLand.FindAction("Hotbar1", throwIfNotFound: true);
+            m_HumanoidLand_Reload = m_HumanoidLand.FindAction("Reload", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -548,6 +569,7 @@ namespace Input
         private readonly InputAction m_HumanoidLand_Fire;
         private readonly InputAction m_HumanoidLand_AltFire;
         private readonly InputAction m_HumanoidLand_Hotbar1;
+        private readonly InputAction m_HumanoidLand_Reload;
         public struct HumanoidLandActions
         {
             private @InputActions m_Wrapper;
@@ -564,6 +586,7 @@ namespace Input
             public InputAction @Fire => m_Wrapper.m_HumanoidLand_Fire;
             public InputAction @AltFire => m_Wrapper.m_HumanoidLand_AltFire;
             public InputAction @Hotbar1 => m_Wrapper.m_HumanoidLand_Hotbar1;
+            public InputAction @Reload => m_Wrapper.m_HumanoidLand_Reload;
             public InputActionMap Get() { return m_Wrapper.m_HumanoidLand; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -609,6 +632,9 @@ namespace Input
                     @Hotbar1.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnHotbar1;
                     @Hotbar1.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnHotbar1;
                     @Hotbar1.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnHotbar1;
+                    @Reload.started -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnReload;
+                    @Reload.performed -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnReload;
+                    @Reload.canceled -= m_Wrapper.m_HumanoidLandActionsCallbackInterface.OnReload;
                 }
                 m_Wrapper.m_HumanoidLandActionsCallbackInterface = instance;
                 if (instance != null)
@@ -649,6 +675,9 @@ namespace Input
                     @Hotbar1.started += instance.OnHotbar1;
                     @Hotbar1.performed += instance.OnHotbar1;
                     @Hotbar1.canceled += instance.OnHotbar1;
+                    @Reload.started += instance.OnReload;
+                    @Reload.performed += instance.OnReload;
+                    @Reload.canceled += instance.OnReload;
                 }
             }
         }
@@ -667,6 +696,7 @@ namespace Input
             void OnFire(InputAction.CallbackContext context);
             void OnAltFire(InputAction.CallbackContext context);
             void OnHotbar1(InputAction.CallbackContext context);
+            void OnReload(InputAction.CallbackContext context);
         }
     }
 }

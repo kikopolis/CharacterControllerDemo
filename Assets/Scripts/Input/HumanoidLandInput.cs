@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace Input {
     public class HumanoidLandInput : MonoBehaviour {
+        public static HumanoidLandInput instance { get; private set; }
         public Vector2 moveInput { get; private set; } = Vector2.zero;
         public Vector2 lookInput { get; private set; } = Vector2.zero;
         public bool moveIsPressed { get; private set; }
@@ -16,6 +17,7 @@ namespace Input {
         public float interactInput { get; private set; }
         public bool fireInput { get; private set; }
         public bool altFireInput { get; private set; }
+        public bool reloadInput { get; private set; }
         public bool switchCharacterWasPressedThisFrame { get; private set; }
         public bool hotbarOneInput { get; private set; }
 
@@ -29,9 +31,11 @@ namespace Input {
         private InputAction interactAction;
         private InputAction fireAction;
         private InputAction altFireAction;
+        private InputAction reloadAction;
         private InputAction hotbarOneAction;
 
         private void Awake() {
+            instance = this;
             inputActions = new InputActions();
             moveAction = inputActions.HumanoidLand.Move;
             lookAction = inputActions.HumanoidLand.Look;
@@ -42,6 +46,7 @@ namespace Input {
             interactAction = inputActions.HumanoidLand.Interact;
             fireAction = inputActions.HumanoidLand.Fire;
             altFireAction = inputActions.HumanoidLand.AltFire;
+            reloadAction = inputActions.HumanoidLand.Reload;
             hotbarOneAction = inputActions.HumanoidLand.Hotbar1;
         }
 
@@ -75,6 +80,9 @@ namespace Input {
             altFireAction.started += SetAltFire;
             altFireAction.canceled += SetAltFire;
 
+            reloadAction.started += SetReload;
+            reloadAction.canceled += SetReload;
+
             hotbarOneAction.started += SetHotbarOne;
             hotbarOneAction.canceled += SetHotbarOne;
         }
@@ -106,6 +114,9 @@ namespace Input {
 
             altFireAction.started -= SetAltFire;
             altFireAction.canceled -= SetAltFire;
+
+            reloadAction.started -= SetReload;
+            reloadAction.canceled -= SetReload;
 
             hotbarOneAction.started -= SetHotbarOne;
             hotbarOneAction.canceled -= SetHotbarOne;
@@ -153,6 +164,10 @@ namespace Input {
 
         private void SetAltFire(InputAction.CallbackContext ctx) {
             altFireInput = ctx.started;
+        }
+
+        private void SetReload(InputAction.CallbackContext ctx) {
+            reloadInput = ctx.started;
         }
 
         private void SetHotbarOne(InputAction.CallbackContext ctx) {

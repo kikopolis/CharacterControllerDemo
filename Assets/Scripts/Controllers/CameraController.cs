@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Controllers {
     public class CameraController : MonoBehaviour {
+        public static CameraController instance { get; private set; }
         private const int ACTIVE_CAMERA_PRIORITY_MODIFIER = 31337;
         public bool usingOrbitalCamera { get; private set; }
         public bool usingFirstPersonCamera { get; private set; }
@@ -20,7 +21,7 @@ namespace Controllers {
         [ SerializeField ]
         private float maxOrbitalCameraDistance = 36f;
 
-        private CinemachineVirtualCamera activeCamera;
+        public CinemachineVirtualCamera activeCamera { get; private set; }
         private CinemachineFramingTransposer thirdPersonCameraTransposer;
         private CinemachineFramingTransposer orbitalCameraTransposer;
 
@@ -30,6 +31,7 @@ namespace Controllers {
         public CinemachineVirtualCamera firstPersonCamera;
 
         private void Awake() {
+            instance = this;
             thirdPersonCameraTransposer = thirdPersonCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
             orbitalCameraTransposer = orbitalCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
         }
