@@ -1,4 +1,5 @@
-﻿using Cinemachine;
+﻿using System;
+using Cinemachine;
 using Controllers;
 using Input;
 using PlayerSystems;
@@ -19,8 +20,9 @@ public class PlayerManager : MonoBehaviour {
     private WeaponSystem weaponSystem;
     [ HideInInspector ]
     public Transform gunAttackSource;
-    private IEquippableWeapon[] hotbar = new IEquippableWeapon[10];
-    private IEquippableWeapon currentEquippedWeapon;
+    private EquippableWeapon[] hotbar = new EquippableWeapon[10];
+    private EquippableWeapon currentEquippedWeapon;
+    private IngameUiManager uiManager;
 
     private void Awake() {
         instance = this;
@@ -29,6 +31,10 @@ public class PlayerManager : MonoBehaviour {
         gunAttackSource = GetCurrentCameraFollow();
         redController.enabled = true;
         // greenController.enabled = false;
+    }
+
+    private void Start() {
+        uiManager = IngameUiManager.instance;
     }
 
     private void FixedUpdate() {
@@ -49,6 +55,7 @@ public class PlayerManager : MonoBehaviour {
     private void SelectWeapon() {
         if (input.hotbarOneInput) {
             currentEquippedWeapon = hotbar[0];
+            uiManager.SelectWeapon(currentEquippedWeapon);
         }
     }
 
@@ -90,14 +97,14 @@ public class PlayerManager : MonoBehaviour {
         // return redController.enabled ? redController.cameraFollow : greenController.cameraFollow;
     }
 
-    public void AddToHotbar(IEquippableWeapon item, int slot) {
+    public void AddToHotbar(EquippableWeapon item, int slot) {
         if (slot > 10) {
             return;
         }
         hotbar[slot] = item;
     }
 
-    public void RemoveFromHotbar(IEquippableWeapon item, int slot) {
+    public void RemoveFromHotbar(EquippableWeapon item, int slot) {
         if (slot > 10) {
             return;
         }
