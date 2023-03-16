@@ -1,4 +1,5 @@
 ﻿using Controllers;
+using Generics;
 using Input;
 using PlayerSystems;
 using UnityEngine;
@@ -7,18 +8,25 @@ namespace Weapons {
     public class GravityGun : EquippableWeapon {
         private const float GRAVITATIONAL_CONSTANT = 0.667408f;
         private HumanoidLandInput input;
+        private float holdingRange = 3f;
+        private float lerpSpeed = 5f;
         private Transform attackSource;
+        private Transform holdPoint;
         private Camera playerCamera;
         private RaycastHit hit;
         private bool gravityMode = true;
-        private string modeText;
+        public string modeText;
         private bool alreadySwitchedMode;
         private float range = 50f;
+        private float distanceToRb;
+        private Grabbable grabbable;
+        private Rigidbody rb;
 
         private void Start() {
             attackSource = PlayerManager.instance.gunAttackSource;
             playerCamera = CameraController.instance.mainCamera;
             input = HumanoidLandInput.instance;
+            holdPoint = PlayerManager.instance.GetGrabbableHoldPoint();
             SetModeText();
         }
 
@@ -26,13 +34,15 @@ namespace Weapons {
             if (!input.altFireInput && alreadySwitchedMode) {
                 alreadySwitchedMode = false;
             }
+            Attract();
         }
 
         public override void Fire() {
             var ray = playerCamera.ScreenPointToRay(UnityEngine.Input.mousePosition);
             Physics.Raycast(ray, out hit, range);
-            if (hit.collider.attachedRigidbody != null) {
-                Attract(hit.collider.attachedRigidbody);
+            if (hit.collider) {
+                hit.transform.TryGetComponent(out grabbable);
+                hit.transform.TryGetComponent(out rb);
             }
         }
 
@@ -56,7 +66,14 @@ namespace Weapons {
             return modeText;
         }
 
-        private void Attract(Rigidbody rb) {
+        private void SetModeText() {
+            modeText = gravityMode ? "Pull" : "Push";
+        }
+
+        private void Attract() {
+            if (!grabbable || !rb) {
+                return;
+            }
             var direction = attackSource.position - rb.position;
             var distance = direction.magnitude;
             if (distance == 0f) {
@@ -65,19 +82,41 @@ namespace Weapons {
             var forceMagnitude = GRAVITATIONAL_CONSTANT * (750f * rb.mass) / distance;
             var force = direction.normalized * forceMagnitude;
             // todo, when object is in front of the player, stop attracting and keep the object hovering
-            var distanceToRb = Vector3.Distance(rb.position, attackSource.position);
-            if (!gravityMode && distanceToRb > 1f && distanceToRb < range) {
+            distanceToRb = Vector3.Distance(rb.position, attackSource.position);
+            if (ShouldRepel()) {
                 rb.AddForce(-force, ForceMode.Acceleration);
-            } else if (distanceToRb > 1f && distanceToRb < range) {
+            } else if (ShouldAttract()) {
                 rb.AddForce(force, ForceMode.Acceleration);
-            } else if (distanceToRb < 1f) {
-                rb.velocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
+            } else if (ShouldHold()) {
+                // hold in place in hold point
+                grabbable.Grab(holdPoint);
+            } else {
+                grabbable.Drop();
+                rb = null;
+                grabbable = null;
             }
+            // if (!gravityMode && distanceToRb > holdingRange && distanceToRb < range) {
+            //     rb.AddForce(-force, ForceMode.Acceleration);
+            // } else if (distanceToRb > holdingRange && distanceToRb < range) {
+            //     rb.AddForce(force, ForceMode.Acceleration);
+            // } else if (distanceToRb < holdingRange) {
+            //     rb.velocity = Vector3.zero;
+            //     rb.angularVelocity = Vector3.zero;
+            //     var pos = Vector3.Lerp(transform.position, attackSource.position, Time.deltaTime * lerpSpeed);
+            //     rb.MovePosition(pos);
+            // }
         }
 
-        private void SetModeText() {
-            modeText = gravityMode ? "Pull" : "Push";
+        private bool ShouldRepel() {
+            return input.fireInput && !gravityMode && distanceToRb < range;
+        }
+
+        private bool ShouldAttract() {
+            return input.fireInput && distanceToRb > holdingRange && distanceToRb < range;
+        }
+        
+        private bool ShouldHold() {
+            return input.fireInput && distanceToRb < holdingRange;
         }
     }
 }

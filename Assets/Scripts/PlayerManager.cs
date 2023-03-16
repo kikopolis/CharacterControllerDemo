@@ -1,5 +1,4 @@
-﻿using System;
-using Cinemachine;
+﻿using Cinemachine;
 using Controllers;
 using Input;
 using PlayerSystems;
@@ -20,9 +19,14 @@ public class PlayerManager : MonoBehaviour {
     private WeaponSystem weaponSystem;
     [ HideInInspector ]
     public Transform gunAttackSource;
+    private Transform grabbableHoldPoint;
     private EquippableWeapon[] hotbar = new EquippableWeapon[10];
     private EquippableWeapon currentEquippedWeapon;
     private IngameUiManager uiManager;
+
+    public Transform GetGrabbableHoldPoint() {
+        return grabbableHoldPoint;
+    }
 
     private void Awake() {
         instance = this;

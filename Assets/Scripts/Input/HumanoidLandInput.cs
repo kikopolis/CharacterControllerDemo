@@ -14,7 +14,8 @@ namespace Input {
         public bool runInput { get; private set; }
         public bool jumpInput { get; private set; }
         public bool crouchInput { get; private set; }
-        public float interactInput { get; private set; }
+        public bool interactInput { get; private set; }
+        public float interactInputTime { get; private set; }
         public bool fireInput { get; private set; }
         public bool altFireInput { get; private set; }
         public bool reloadInput { get; private set; }
@@ -155,7 +156,8 @@ namespace Input {
         }
 
         private void SetInteract(InputAction.CallbackContext ctx) {
-            interactInput = ctx.ReadValue<float>();
+            interactInput = ctx.started;
+            interactInputTime = ctx.ReadValue<float>();
         }
 
         private void SetFire(InputAction.CallbackContext ctx) {

@@ -27,6 +27,7 @@ namespace Generics {
             if (holdPoint != null && rb != null) {
                 // Reset velocity to fix object jittering when player moves
                 rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
                 var pos = Vector3.Lerp(transform.position, holdPoint.position, Time.deltaTime * lerpSpeed);
                 rb.MovePosition(pos);
             }

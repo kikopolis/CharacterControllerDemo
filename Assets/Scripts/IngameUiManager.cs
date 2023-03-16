@@ -16,10 +16,16 @@ public class IngameUiManager : MonoBehaviour {
 
     private void Update() {
         // todo can also check for aiming enabled like this
+        if (currentWeapon) {
+            WeaponUI();
+        }
+    }
+
+    private void WeaponUI() {
         if (currentWeapon.HasAlternateMode()) {
             selectedWeaponModeText.text = currentWeapon.GetModeText();
         }
-    }
+    } 
 
     public void SelectWeapon(EquippableWeapon weapon) {
         currentWeapon = weapon;

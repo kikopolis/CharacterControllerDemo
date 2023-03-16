@@ -1,4 +1,3 @@
-using System;
 using Cinemachine;
 using Input;
 using UnityEngine;
@@ -73,10 +72,10 @@ namespace Controllers {
         }
 
         private void SetDefaultCamera() {
-            thirdPersonCamera.Priority += ACTIVE_CAMERA_PRIORITY_MODIFIER;
-            activeCamera = thirdPersonCamera;
-            usingFirstPersonCamera = false;
-            usingThirdPersonCamera = true;
+            firstPersonCamera.Priority += ACTIVE_CAMERA_PRIORITY_MODIFIER;
+            activeCamera = firstPersonCamera;
+            usingFirstPersonCamera = true;
+            usingThirdPersonCamera = false;
             usingOrbitalCamera = false;
         }
 
