@@ -5,7 +5,5 @@ namespace PlayerSystems {
         public abstract void Fire();
         public abstract void AltFire();
         public abstract string GetName();
-        public abstract bool HasAlternateMode();
-        public abstract string GetModeText();
     }
 }

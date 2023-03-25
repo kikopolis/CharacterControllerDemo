@@ -5,14 +5,12 @@ using UnityEngine;
 
 namespace Controllers {
     public class HumanoidLandController : MonoBehaviour {
-        private const double TOLERANCE = 0.0005f;
-
-        public Transform cameraFollow;
-        private Vector3 playerLookInput;
-        private Vector3 previousPlayerLookInput;
-        private float cameraPitch;
-        [ SerializeField ]
-        private CameraController cameraController;
+        private const float           TOLERANCE = 0.0005f;
+        public        Transform        cameraFollow;
+        private       Vector3          playerLookInput;
+        private       Vector3          previousPlayerLookInput;
+        private       float            cameraPitch;
+        private       CameraController cameraController;
         [ SerializeField ]
         private float playerLookInputLerpTime = 0.35f;
         private Rigidbody rb;
@@ -140,6 +138,8 @@ namespace Controllers {
         private void Awake() {
             rb = GetComponent<Rigidbody>();
             cc = GetComponent<CapsuleCollider>();
+            
+            cameraController = CameraController.instance;
 
             maxAscendRayDistance = maxStepHeight / Mathf.Cos(maximumAngleOfApproachToAscend * Mathf.Deg2Rad);
             maxDescendRayDistance = maxStepHeight / Mathf.Cos(80f * Mathf.Deg2Rad);

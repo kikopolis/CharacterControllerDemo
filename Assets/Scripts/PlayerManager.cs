@@ -17,22 +17,21 @@ public class PlayerManager : MonoBehaviour {
     [ SerializeField ]
     private Inventory redInventory;
     private WeaponSystem weaponSystem;
-    [ HideInInspector ]
-    public Transform gunAttackSource;
-    private Transform grabbableHoldPoint;
+    [SerializeField]
+    private Transform equipmentAnchor;
+    [SerializeField]
+    private Transform grabbableAnchor;
     private EquippableWeapon[] hotbar = new EquippableWeapon[10];
     private EquippableWeapon currentEquippedWeapon;
     private IngameUiManager uiManager;
 
-    public Transform GetGrabbableHoldPoint() {
-        return grabbableHoldPoint;
+    public Transform GetGrabbableAnchor() {
+        return grabbableAnchor;
     }
 
     private void Awake() {
         instance = this;
         weaponSystem = GetComponent<WeaponSystem>();
-        // todo when weapon has a model, maybe add a true weapon tip transform?
-        gunAttackSource = GetCurrentCameraFollow();
         redController.enabled = true;
         // greenController.enabled = false;
     }
@@ -53,7 +52,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     private void GenerateTestHotbar() {
-        hotbar[0] = weaponSystem.gravityGun;
+        hotbar[0] = weaponSystem.GetGravityGun();
     }
 
     private void SelectWeapon() {
@@ -95,8 +94,12 @@ public class PlayerManager : MonoBehaviour {
         orbitalCamera.Follow = currentCameraFollow;
         orbitalCamera.LookAt = currentCameraFollow;
     }
+    
+    public Transform GetEquipmentAnchor() {
+        return equipmentAnchor;
+    }
 
-    private Transform GetCurrentCameraFollow() {
+    public Transform GetCurrentCameraFollow() {
         return redController.cameraFollow;
         // return redController.enabled ? redController.cameraFollow : greenController.cameraFollow;
     }

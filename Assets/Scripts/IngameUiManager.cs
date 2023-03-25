@@ -5,9 +5,11 @@ using UnityEngine;
 public class IngameUiManager : MonoBehaviour {
     public static IngameUiManager instance { get; private set; }
     [ SerializeField ]
-    private TextMeshProUGUI selectedWeaponNameText;
+    public TextMeshProUGUI selectedWeaponNameText;
     [ SerializeField ]
-    private TextMeshProUGUI selectedWeaponModeText;
+    public TextMeshProUGUI selectedWeaponModeText;
+    [ SerializeField ]
+    public TextMeshProUGUI interactableObjectNameText;
     private EquippableWeapon currentWeapon;
 
     private void Awake() {
@@ -19,12 +21,11 @@ public class IngameUiManager : MonoBehaviour {
         if (currentWeapon) {
             WeaponUI();
         }
+        // todo implement interactable object ui
     }
 
     private void WeaponUI() {
-        if (currentWeapon.HasAlternateMode()) {
-            selectedWeaponModeText.text = currentWeapon.GetModeText();
-        }
+        selectedWeaponModeText.enabled = true;
     } 
 
     public void SelectWeapon(EquippableWeapon weapon) {

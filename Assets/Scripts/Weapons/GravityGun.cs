@@ -4,119 +4,211 @@ using Input;
 using PlayerSystems;
 using UnityEngine;
 
-namespace Weapons {
-    public class GravityGun : EquippableWeapon {
-        private const float GRAVITATIONAL_CONSTANT = 0.667408f;
-        private HumanoidLandInput input;
-        private float holdingRange = 3f;
-        private float lerpSpeed = 5f;
-        private Transform attackSource;
-        private Transform holdPoint;
-        private Camera playerCamera;
-        private RaycastHit hit;
-        private bool gravityMode = true;
-        public string modeText;
-        private bool alreadySwitchedMode;
-        private float range = 50f;
-        private float distanceToRb;
-        private Grabbable grabbable;
-        private Rigidbody rb;
+namespace Weapons{
+public class GravityGun : EquippableWeapon{
+    private const float GRAVITATIONAL_CONSTANT = 0.667408f;
+    private HumanoidLandInput input;
+    private float cooldown = 0.2f;
+    public float cooldownTimer;
+    private float minPushForce = 10f;
+    private float maxPushForce = 100f;
+    private float forceChargeProgress;
+    private float releaseTimerOnRepel = 0.5f;
+    // This is the upgradable coefficient for more powerful gravgun
+    private float powerLevel = 6f;
+    private float holdingRange = 3f;
+    private float lerpSpeed = 5f;
+    private Transform holdAnchor;
+    private Camera playerCamera;
+    private RaycastHit hit;
+    private string modeText;
+    private float maxRange = 30f;
+    private ForceMode forceMode = ForceMode.Impulse;
+    public float distanceToRb;
+    private string grabbableName;
+    public Grabbable grabbable;
+    public Grabbable temporaryGrabbable;
+    public Rigidbody rb;
+    public Rigidbody temporaryRb;
+    public Mode operationMode = Mode.NEUTRAL;
+    public enum Mode{
+        ATTRACT, REPEL, NEUTRAL,
+    }
 
-        private void Start() {
-            attackSource = PlayerManager.instance.gunAttackSource;
-            playerCamera = CameraController.instance.mainCamera;
-            input = HumanoidLandInput.instance;
-            holdPoint = PlayerManager.instance.GetGrabbableHoldPoint();
-            SetModeText();
+    private void Start() {
+        forceChargeProgress = minPushForce;
+        input = HumanoidLandInput.instance;
+        playerCamera = CameraController.instance.mainCamera;
+        holdAnchor = PlayerManager.instance.GetGrabbableAnchor();
+        SetModeText();
+    }
+
+    private void FixedUpdate() {
+        // General cooldown timer
+        if (cooldownTimer > 0) {
+            cooldownTimer -= Time.deltaTime;
         }
-
-        private void Update() {
-            if (!input.altFireInput && alreadySwitchedMode) {
-                alreadySwitchedMode = false;
-            }
+        // If a grabbable and rb are already existing, check if they are still in range
+        if (grabbable && rb) {
+            distanceToRb = Vector3.Distance(holdAnchor.position, rb.position);
+        } else {
+            distanceToRb = 0f;
+        }
+        // Find a grabbable and set it as a temporary grabbable
+        FindGrabbable();
+        // If when the player presses the fire button, a grabbable is set and now it needs to be attracted
+        if (grabbable && rb && operationMode == Mode.ATTRACT && CooldownExpired()) {
             Attract();
         }
+        // If when the player presses the fire button, a grabbable is set and now it needs to be repelled
+        if (grabbable && rb && operationMode == Mode.REPEL) {
+            Repel();
+        }
+        // If neutral mode is selected or the rb is out of max range, release and reset
+        if (operationMode == Mode.NEUTRAL || distanceToRb > maxRange) {
+            Release();
+        }
+        if (grabbable && rb && operationMode == Mode.ATTRACT && distanceToRb <= holdingRange && operationMode != Mode.NEUTRAL) {
+            Hold();
+        }
+        SetModeText();
+    }
 
-        public override void Fire() {
-            var ray = playerCamera.ScreenPointToRay(UnityEngine.Input.mousePosition);
-            Physics.Raycast(ray, out hit, range);
-            if (hit.collider) {
-                hit.transform.TryGetComponent(out grabbable);
-                hit.transform.TryGetComponent(out rb);
+    public override void Fire() {
+        // If a grabbable and a rigidbody are already existing, release them
+        if (grabbable && rb && CooldownExpired()) {
+            operationMode = Mode.NEUTRAL;
+        } else if (temporaryGrabbable && temporaryRb) {
+            grabbable = temporaryGrabbable;
+            rb = temporaryRb;
+            rb.useGravity = false;
+            if (rb.interpolation != RigidbodyInterpolation.Interpolate) {
+                rb.interpolation = RigidbodyInterpolation.Interpolate;
             }
-        }
-
-        public override void AltFire() {
-            if (!alreadySwitchedMode) {
-                gravityMode = !gravityMode;
-                alreadySwitchedMode = true;
-                SetModeText();
-            }
-        }
-
-        public override string GetName() {
-            return "Gravity Gun";
-        }
-
-        public override bool HasAlternateMode() {
-            return true;
-        }
-
-        public override string GetModeText() {
-            return modeText;
-        }
-
-        private void SetModeText() {
-            modeText = gravityMode ? "Pull" : "Push";
-        }
-
-        private void Attract() {
-            if (!grabbable || !rb) {
-                return;
-            }
-            var direction = attackSource.position - rb.position;
-            var distance = direction.magnitude;
-            if (distance == 0f) {
-                return;
-            }
-            var forceMagnitude = GRAVITATIONAL_CONSTANT * (750f * rb.mass) / distance;
-            var force = direction.normalized * forceMagnitude;
-            // todo, when object is in front of the player, stop attracting and keep the object hovering
-            distanceToRb = Vector3.Distance(rb.position, attackSource.position);
-            if (ShouldRepel()) {
-                rb.AddForce(-force, ForceMode.Acceleration);
-            } else if (ShouldAttract()) {
-                rb.AddForce(force, ForceMode.Acceleration);
-            } else if (ShouldHold()) {
-                // hold in place in hold point
-                grabbable.Grab(holdPoint);
-            } else {
-                grabbable.Drop();
-                rb = null;
-                grabbable = null;
-            }
-            // if (!gravityMode && distanceToRb > holdingRange && distanceToRb < range) {
-            //     rb.AddForce(-force, ForceMode.Acceleration);
-            // } else if (distanceToRb > holdingRange && distanceToRb < range) {
-            //     rb.AddForce(force, ForceMode.Acceleration);
-            // } else if (distanceToRb < holdingRange) {
-            //     rb.velocity = Vector3.zero;
-            //     rb.angularVelocity = Vector3.zero;
-            //     var pos = Vector3.Lerp(transform.position, attackSource.position, Time.deltaTime * lerpSpeed);
-            //     rb.MovePosition(pos);
-            // }
-        }
-
-        private bool ShouldRepel() {
-            return input.fireInput && !gravityMode && distanceToRb < range;
-        }
-
-        private bool ShouldAttract() {
-            return input.fireInput && distanceToRb > holdingRange && distanceToRb < range;
-        }
-        
-        private bool ShouldHold() {
-            return input.fireInput && distanceToRb < holdingRange;
+            operationMode = Mode.ATTRACT;
         }
     }
+
+    public override void AltFire() {
+        // todo implement charging
+        if (grabbable && rb && CooldownExpired()) {
+            operationMode = Mode.REPEL;
+        } else if (temporaryGrabbable && temporaryRb) {
+            grabbable = temporaryGrabbable;
+            rb = temporaryRb;
+            operationMode = Mode.REPEL;
+        }
+        // Set a release callback
+        Invoke(nameof(Release), releaseTimerOnRepel);
+    }
+
+    public override string GetName() {
+        return "Gravity Gun";
+    }
+
+    private void SetModeText() {
+        modeText = "Charge: " + GetPercentage(forceChargeProgress, minPushForce, maxPushForce);
+        IngameUiManager.instance.selectedWeaponModeText.text = modeText;
+        if (grabbable && rb) {
+            grabbableName = grabbable.name;
+        } else {
+            grabbableName = null;
+        }
+        if (grabbableName != null) {
+            IngameUiManager.instance.interactableObjectNameText.text = grabbableName;
+        }
+    }
+
+    private void FindGrabbable() {
+        // If a grabbable and rb are already existing and in range, return
+        if (grabbable && rb) {
+            return;
+        }
+        var ray = playerCamera.ScreenPointToRay(UnityEngine.Input.mousePosition);
+        Physics.Raycast(ray, out hit, maxRange);
+#if UNITY_EDITOR
+        Debug.DrawRay(ray.origin, ray.direction * maxRange, Color.magenta, 0.1f);
+#endif
+        if (hit.collider) {
+            hit.transform.TryGetComponent(out temporaryGrabbable);
+            hit.transform.TryGetComponent(out temporaryRb);
+        } else {
+            temporaryGrabbable = null;
+            temporaryRb = null;
+        }
+    }
+
+    private void Attract() {
+        if (distanceToRb > holdingRange && distanceToRb < maxRange && operationMode == Mode.ATTRACT) {
+            StartCooldown();
+            rb.AddForce(CalculateForceForAttract(), forceMode);
+        }
+    }
+
+    private void Repel() {
+        if (distanceToRb < maxRange && operationMode == Mode.REPEL) {
+            StartCooldown();
+            rb.AddForce(CalculateForceForRepel(), forceMode);
+        }
+    }
+
+    // todo if player is spamming different directions, the object is lost in space
+    private Vector3 CalculateForceForAttract() {
+        // If player is facing object, set direction from the hold anchor
+        // Vector3 direction;
+        // if (Vector3.Dot(holdAnchor.forward, rb.position - holdAnchor.position) > 0) {
+        //     direction = -holdAnchor.forward;
+        // } else {
+        //     direction = rb.position - holdAnchor.position;
+        // }
+        var direction = -(rb.position - holdAnchor.position);
+        var distance = direction.magnitude;
+        if (distance == 0f) {
+            return Vector3.zero;
+        }
+        var forceMagnitude = 4.5f * (GRAVITATIONAL_CONSTANT * ((powerLevel * forceChargeProgress) * rb.mass) / distance);
+        return direction.normalized * forceMagnitude;
+    }
+
+    private Vector3 CalculateForceForRepel() {
+        var direction = holdAnchor.forward;
+        var distance = direction.magnitude;
+        if (distance == 0f) {
+            return Vector3.zero;
+        }
+        var forceMagnitude = 0.10f * (GRAVITATIONAL_CONSTANT * ((powerLevel * forceChargeProgress) * rb.mass) / distance);
+        return direction.normalized * forceMagnitude;
+    }
+
+    private void Hold() {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        var pos = Vector3.Lerp(rb.position, holdAnchor.position, Time.deltaTime * lerpSpeed * powerLevel);
+        rb.MovePosition(pos);
+    }
+
+    private void Release() {
+        if (!rb || !grabbable) {
+            return;
+        }
+        rb.useGravity = true;
+        temporaryGrabbable = null;
+        temporaryRb = null;
+        grabbable = null;
+        rb = null;
+        operationMode = Mode.NEUTRAL;
+    }
+
+    private bool CooldownExpired() {
+        return cooldownTimer <= 0;
+    }
+
+    private void StartCooldown() {
+        cooldownTimer = cooldown;
+    }
+    
+    private int GetPercentage(float value, float min, float max) {
+        return Mathf.RoundToInt((value - min) / (max - min) * 100);
+    }
+}
 }

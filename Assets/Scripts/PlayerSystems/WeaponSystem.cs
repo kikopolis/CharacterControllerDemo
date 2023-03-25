@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using Weapons;
 
-namespace PlayerSystems {
-    public class WeaponSystem : MonoBehaviour {
-        public GravityGun gravityGun { get; private set; }
-
-        private void Awake() {
-            gravityGun = gameObject.AddComponent<GravityGun>();
-        }
+namespace PlayerSystems{
+public class WeaponSystem : MonoBehaviour{
+    [SerializeField]
+    private GravityGun gravityGun;
+    
+    public GravityGun GetGravityGun(){
+        return gravityGun;
     }
+}
 }

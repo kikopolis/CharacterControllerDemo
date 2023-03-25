@@ -13,7 +13,7 @@ namespace PlayerSystems {
         private Grabbable grabbable;
 
         void Start() {
-            holdPoint = PlayerManager.instance.GetGrabbableHoldPoint();
+            holdPoint = PlayerManager.instance.GetGrabbableAnchor();
             playerCamera = CameraController.instance.mainCamera;
             input = HumanoidLandInput.instance;
         }
