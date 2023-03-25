@@ -21,8 +21,8 @@ public class PlayerManager : MonoBehaviour {
     private Transform equipmentAnchor;
     [SerializeField]
     private Transform grabbableAnchor;
-    private EquippableWeapon[] hotbar = new EquippableWeapon[10];
-    private EquippableWeapon currentEquippedWeapon;
+    private IEquipableOnHotbar[] hotbar = new IEquipableOnHotbar[10];
+    private IEquipableOnHotbar currentEquippedWeapon;
     private IngameUiManager uiManager;
 
     public Transform GetGrabbableAnchor() {
@@ -50,6 +50,17 @@ public class PlayerManager : MonoBehaviour {
             SwitchCharacter();
         }
     }
+    
+    private void Fire() {
+        if (currentEquippedWeapon == null) {
+            return;
+        }
+        if (input.fireInput) {
+            currentEquippedWeapon.Fire();
+        } else if (input.altFireInput) {
+            currentEquippedWeapon.AltFire();
+        }
+    }
 
     private void GenerateTestHotbar() {
         hotbar[0] = weaponSystem.GetGravityGun();
@@ -59,17 +70,6 @@ public class PlayerManager : MonoBehaviour {
         if (input.hotbarOneInput) {
             currentEquippedWeapon = hotbar[0];
             uiManager.SelectWeapon(currentEquippedWeapon);
-        }
-    }
-
-    private void Fire() {
-        if (currentEquippedWeapon == null) {
-            return;
-        }
-        if (input.fireInput) {
-            currentEquippedWeapon.Fire();
-        } else if (input.altFireInput) {
-            currentEquippedWeapon.AltFire();
         }
     }
 
@@ -104,14 +104,14 @@ public class PlayerManager : MonoBehaviour {
         // return redController.enabled ? redController.cameraFollow : greenController.cameraFollow;
     }
 
-    public void AddToHotbar(EquippableWeapon item, int slot) {
+    public void AddToHotbar(IEquipableOnHotbar item, int slot) {
         if (slot > 10) {
             return;
         }
         hotbar[slot] = item;
     }
 
-    public void RemoveFromHotbar(EquippableWeapon item, int slot) {
+    public void RemoveFromHotbar(IEquipableOnHotbar item, int slot) {
         if (slot > 10) {
             return;
         }

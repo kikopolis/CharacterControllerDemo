@@ -10,7 +10,7 @@ public class IngameUiManager : MonoBehaviour {
     public TextMeshProUGUI selectedWeaponModeText;
     [ SerializeField ]
     public TextMeshProUGUI interactableObjectNameText;
-    private EquippableWeapon currentWeapon;
+    private IEquipableOnHotbar currentWeapon;
 
     private void Awake() {
         instance = this;
@@ -18,7 +18,7 @@ public class IngameUiManager : MonoBehaviour {
 
     private void Update() {
         // todo can also check for aiming enabled like this
-        if (currentWeapon) {
+        if (currentWeapon != null) {
             WeaponUI();
         }
         // todo implement interactable object ui
@@ -28,8 +28,8 @@ public class IngameUiManager : MonoBehaviour {
         selectedWeaponModeText.enabled = true;
     } 
 
-    public void SelectWeapon(EquippableWeapon weapon) {
+    public void SelectWeapon(IEquipableOnHotbar weapon) {
         currentWeapon = weapon;
-        selectedWeaponNameText.text = currentWeapon.GetName();
+        selectedWeaponNameText.text = currentWeapon.GetInfo().GetName();
     }
 }

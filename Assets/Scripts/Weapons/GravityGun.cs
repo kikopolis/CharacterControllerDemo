@@ -5,7 +5,7 @@ using PlayerSystems;
 using UnityEngine;
 
 namespace Weapons{
-public class GravityGun : EquippableWeapon{
+public class GravityGun : MonoBehaviour, IEquipableOnHotbar{
     private const float GRAVITATIONAL_CONSTANT = 0.667408f;
     private HumanoidLandInput input;
     private float cooldown = 0.2f;
@@ -33,6 +33,12 @@ public class GravityGun : EquippableWeapon{
     public Mode operationMode = Mode.NEUTRAL;
     public enum Mode{
         ATTRACT, REPEL, NEUTRAL,
+    }
+
+    private class Info : IItemInfo{
+        public string GetName() {
+            return "Gravity Gun";
+        }
     }
 
     private void Start() {
@@ -68,13 +74,17 @@ public class GravityGun : EquippableWeapon{
         if (operationMode == Mode.NEUTRAL || distanceToRb > maxRange) {
             Release();
         }
-        if (grabbable && rb && operationMode == Mode.ATTRACT && distanceToRb <= holdingRange && operationMode != Mode.NEUTRAL) {
+        if (grabbable
+         && rb
+         && operationMode == Mode.ATTRACT
+         && distanceToRb  <= holdingRange
+         && operationMode != Mode.NEUTRAL) {
             Hold();
         }
         SetModeText();
     }
 
-    public override void Fire() {
+    public void Fire() {
         // If a grabbable and a rigidbody are already existing, release them
         if (grabbable && rb && CooldownExpired()) {
             operationMode = Mode.NEUTRAL;
@@ -89,7 +99,7 @@ public class GravityGun : EquippableWeapon{
         }
     }
 
-    public override void AltFire() {
+    public void AltFire() {
         // todo implement charging
         if (grabbable && rb && CooldownExpired()) {
             operationMode = Mode.REPEL;
@@ -102,8 +112,9 @@ public class GravityGun : EquippableWeapon{
         Invoke(nameof(Release), releaseTimerOnRepel);
     }
 
-    public override string GetName() {
-        return "Gravity Gun";
+    public IItemInfo GetInfo() {
+        // return anonymous class
+        return new Info();
     }
 
     private void SetModeText() {
@@ -166,7 +177,8 @@ public class GravityGun : EquippableWeapon{
         if (distance == 0f) {
             return Vector3.zero;
         }
-        var forceMagnitude = 4.5f * (GRAVITATIONAL_CONSTANT * ((powerLevel * forceChargeProgress) * rb.mass) / distance);
+        var forceMagnitude
+            = 4.5f * (GRAVITATIONAL_CONSTANT * ((powerLevel * forceChargeProgress) * rb.mass) / distance);
         return direction.normalized * forceMagnitude;
     }
 
@@ -176,7 +188,8 @@ public class GravityGun : EquippableWeapon{
         if (distance == 0f) {
             return Vector3.zero;
         }
-        var forceMagnitude = 0.10f * (GRAVITATIONAL_CONSTANT * ((powerLevel * forceChargeProgress) * rb.mass) / distance);
+        var forceMagnitude
+            = 0.10f * (GRAVITATIONAL_CONSTANT * ((powerLevel * forceChargeProgress) * rb.mass) / distance);
         return direction.normalized * forceMagnitude;
     }
 
@@ -206,7 +219,7 @@ public class GravityGun : EquippableWeapon{
     private void StartCooldown() {
         cooldownTimer = cooldown;
     }
-    
+
     private int GetPercentage(float value, float min, float max) {
         return Mathf.RoundToInt((value - min) / (max - min) * 100);
     }
