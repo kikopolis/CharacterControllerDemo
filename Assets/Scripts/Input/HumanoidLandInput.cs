@@ -18,6 +18,7 @@ namespace Input {
         public float interactInputTime { get; private set; }
         public bool fireInput { get; private set; }
         public bool altFireInput { get; private set; }
+        public bool middleMouseInput { get; private set; }
         public bool reloadInput { get; private set; }
         public bool switchCharacterWasPressedThisFrame { get; private set; }
         public bool hotbarOneInput { get; private set; }
@@ -32,6 +33,7 @@ namespace Input {
         private InputAction interactAction;
         private InputAction fireAction;
         private InputAction altFireAction;
+        private InputAction middleMouseAction;
         private InputAction reloadAction;
         private InputAction hotbarOneAction;
 
@@ -47,6 +49,7 @@ namespace Input {
             interactAction = inputActions.HumanoidLand.Interact;
             fireAction = inputActions.HumanoidLand.Fire;
             altFireAction = inputActions.HumanoidLand.AltFire;
+            middleMouseAction = inputActions.HumanoidLand.MiddleMouse;
             reloadAction = inputActions.HumanoidLand.Reload;
             hotbarOneAction = inputActions.HumanoidLand.Hotbar1;
         }
@@ -80,6 +83,9 @@ namespace Input {
 
             altFireAction.started += SetAltFire;
             altFireAction.canceled += SetAltFire;
+            
+            middleMouseAction.started += SetMiddleMouse;
+            middleMouseAction.canceled += SetMiddleMouse;
 
             reloadAction.started += SetReload;
             reloadAction.canceled += SetReload;
@@ -115,6 +121,9 @@ namespace Input {
 
             altFireAction.started -= SetAltFire;
             altFireAction.canceled -= SetAltFire;
+            
+            middleMouseAction.started -= SetMiddleMouse;
+            middleMouseAction.canceled -= SetMiddleMouse;
 
             reloadAction.started -= SetReload;
             reloadAction.canceled -= SetReload;
@@ -166,6 +175,10 @@ namespace Input {
 
         private void SetAltFire(InputAction.CallbackContext ctx) {
             altFireInput = ctx.started;
+        }
+        
+        private void SetMiddleMouse(InputAction.CallbackContext ctx) {
+            middleMouseInput = ctx.started;
         }
 
         private void SetReload(InputAction.CallbackContext ctx) {

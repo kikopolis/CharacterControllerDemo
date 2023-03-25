@@ -105,6 +105,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "MiddleMouse",
+                    "type": "Button",
+                    "id": "8ff60b37-2eeb-4334-b8dd-2b3bd66a0087",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Hotbar1",
                     "type": "Button",
                     "id": "edcb10e3-62f3-4f37-a2fe-ce4f070b0c8f",
@@ -451,6 +460,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9f721ad2-266a-4074-bc01-9637093efa63",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MiddleMouse",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
